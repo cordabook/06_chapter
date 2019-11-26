@@ -22,7 +22,7 @@ import java.util.List;
 // * State *
 // *********
 @BelongsToContract(ToDoContract.class)
-public class ToDoState implements LinearState { //},  SchedulableState {
+public class ToDoState implements LinearState,  SchedulableState {
 
     private final Party assignedBy;
     private final Party assignedTo;
