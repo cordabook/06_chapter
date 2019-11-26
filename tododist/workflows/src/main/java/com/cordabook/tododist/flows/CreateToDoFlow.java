@@ -71,31 +71,32 @@ public class CreateToDoFlow extends FlowLogic<Void> {
         System.out.println("1");
         tb = tb.addOutputState(ts);
         //CommandWithParties<Command.CreateToDoCommand> cmd =
-        TimeWindow tw = TimeWindow.between(Instant.now(),Instant.now().plusSeconds(300));
-        tb = tb.setTimeWindow(tw);
-        tb = tb.withItems(notary,ts,tw);
+        //TimeWindow tw = TimeWindow.between(Instant.now(),Instant.now().plusSeconds(300));
+        //tb = tb.setTimeWindow(tw);
+        //tb = tb.withItems(notary,ts,tw);
         System.out.println("1");
-        SignedTransaction stx = getServiceHub()
-                .signInitialTransaction(
-                        new TransactionBuilder().withItems(
-                                notary,
-                                new ToDoState(me,me,taskDescription),
-                                TimeWindow.between(Instant.now(),Instant.now().plusSeconds(300)),
-                                new CommandWithParties<>(ImmutableList.of(me.getOwningKey()),ImmutableList.of(me),new Command.CreateToDoCommand())));
-        subFlow(new FinalityFlow(
-                getServiceHub()
-                        .signInitialTransaction(
-                                new TransactionBuilder().withItems(
-                                        notary,
-                                        new ToDoState(me,me,taskDescription),
-                                        TimeWindow.between(Instant.now(),Instant.now().plusSeconds(300)),
-                                        new CommandWithParties<>(ImmutableList.of(
-                                                getOurIdentity().getOwningKey()),
-                                                ImmutableList.of(getOurIdentity()),
-                                                new Command.CreateToDoCommand()))),
-                Collections.<FlowSession>emptySet())
-        );
-        System.out.println("1");
+        SignedTransaction stx = serviceHub.signInitialTransaction(tb);
+//        SignedTransaction stx = getServiceHub()
+//                .signInitialTransaction(
+//                        new TransactionBuilder().withItems(
+//                                notary,
+//                                new ToDoState(me,me,taskDescription),
+//                                TimeWindow.between(Instant.now(),Instant.now().plusSeconds(300)),
+//                                new CommandWithParties<>(ImmutableList.of(me.getOwningKey()),ImmutableList.of(me),new Command.CreateToDoCommand())));
+//        subFlow(new FinalityFlow(
+//                getServiceHub()
+//                        .signInitialTransaction(
+//                                new TransactionBuilder().withItems(
+//                                        notary,
+//                                        new ToDoState(me,me,taskDescription),
+//                                        TimeWindow.between(Instant.now(),Instant.now().plusSeconds(300)),
+//                                        new CommandWithParties<>(ImmutableList.of(
+//                                                getOurIdentity().getOwningKey()),
+//                                                ImmutableList.of(getOurIdentity()),
+//                                                new Command.CreateToDoCommand()))),
+//                Collections.<FlowSession>emptySet())
+//        );
+//        System.out.println("1");
         //subFlow(new FinalityFlow(stx));
         subFlow(new FinalityFlow(stx, Collections.<FlowSession>emptySet()));
         System.out.println("1");
